@@ -34,8 +34,8 @@
         if (user.emailVerified) {
           document.getElementById('statusTitle').textContent = `Welcome, ${user.displayName || 'Client'}`;
           document.getElementById('userDisplay').textContent = user.email;
-        } else { window.location.href = "login.html"; }
-      } else { window.location.href = "login.html"; }
+        } else { window.location.href = "index.html"; }
+      } else { window.location.href = "index.html"; }
     });
     document.getElementById('logoutBtn').addEventListener('click', logoutUser);
   </script>

@@ -56,5 +56,5 @@ export const resetUserPassword = async (email) => {
 
 export const logoutUser = async () => {
   await signOut(auth);
-  window.location.href = "login.html";
+  window.location.href = "index.html";
 };
