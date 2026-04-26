@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TrustChain | Admin</title>
+  <link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+  <div class="admin-container">
+    <header>
+      <h1>Admin Dashboard</h1>
+      <button id="adminLogout" class="btn-logout">Logout</button>
+    </header>
+    <div class="stat-card">Total Users: <span id="userCount">0</span></div>
+    <div class="user-list">
+      <table>
+        <thead><tr><th>Username</th><th>Email</th><th>Status</th></tr></thead>
+        <tbody id="userTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+  <script type="module">
+    import { db } from "./firebase.js";
+    import { logoutUser } from "./auth.js";
+    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const fetchUsers = async () => {
+      try {
+        const snap = await getDocs(collection(db, "users"));
+        const body = document.getElementById("userTableBody");
+        document.getElementById("userCount").innerText = snap.size;
+        body.innerHTML = "";
+        snap.forEach(doc => {
+          const u = doc.data();
+          body.innerHTML += `<tr><td>${u.username}</td><td>${u.email}</td><td>Verified</td></tr>`;
+        });
+      } catch (e) { console.error("Admin fetch error", e); }
+    };
+    fetchUsers();
+    document.getElementById("adminLogout").addEventListener("click", logoutUser);
+  </script>
+</body>
+</html>

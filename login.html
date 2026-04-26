@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrustChain | Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="card">
+    <h2>Welcome Back</h2>
+    <div id="errorMessage" class="error-msg"></div>
+
+    <form id="loginForm">
+      <div class="input-group">
+        <label>EMAIL ADDRESS</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+      </div>
+      <div class="input-group">
+        <label>PASSWORD</label>
+        <input type="password" id="password" placeholder="••••••••" required>
+      </div>
+      <button type="submit" id="loginBtn">Authorize Access</button>
+    </form>
+    <div class="switch">
+      New to TrustChain? <a href="signup.html">Create Account</a><br>
+      <a id="forgotPass" style="font-size: 11px; margin-top: 10px; display: inline-block;">Forgot Password?</a>
+    </div>
+  </div>
+
+  <script type="module">
+    import { loginUser, resetUserPassword } from "./auth.js";
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById("loginBtn");
+      btn.disabled = true; btn.innerText = "Authenticating...";
+      await loginUser(document.getElementById("email").value, document.getElementById("password").value);
+      btn.disabled = false; btn.innerText = "Authorize Access";
+    });
+
+    document.getElementById("forgotPass").addEventListener("click", () => {
+      const email = document.getElementById("email").value;
+      resetUserPassword(email);
+    });
+  </script>
+</body>
+</html>

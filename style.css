@@ -1,0 +1,27 @@
+:root {
+  --primary: #8b5cf6;
+  --bg: #0b1224;
+  --card: #161b2c;
+  --input: #1e2539;
+  --error: #f43f5e;
+  --text-muted: #94a3b8;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+body { min-height: 100vh; display: flex; justify-content: center; align-items: center; background: var(--bg); color: #fff; padding: 20px; }
+
+.card { width: 100%; max-width: 400px; background: var(--card); padding: 40px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); text-align: center; }
+
+.input-group { text-align: left; margin-bottom: 18px; }
+.input-group label { display: block; font-size: 11px; color: var(--text-muted); font-weight: 700; margin-bottom: 8px; letter-spacing: 1px; }
+
+input { width: 100%; padding: 14px; background: var(--input); border: 2px solid transparent; border-radius: 10px; color: #fff; font-size: 15px; }
+input:focus { border-color: var(--primary); outline: none; }
+
+.error-msg { color: var(--error); font-size: 12px; margin-top: 8px; min-height: 15px; font-weight: 500; text-align: left; }
+
+button { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.switch { margin-top: 20px; font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+.switch a { color: var(--primary); text-decoration: none; font-weight: 600; cursor: pointer; }
