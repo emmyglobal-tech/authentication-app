@@ -30,7 +30,7 @@ export const startSignup = async (email, username, password, confirmPassword) =>
     });
 
     showError("Link sent! Please verify your email.", "#10b981");
-    setTimeout(() => { window.location.href = "login.html"; }, 3000);
+    setTimeout(() => { window.location.href = "index.html"; }, 3000);
   } catch (err) { showError(err.message); }
 };
 
