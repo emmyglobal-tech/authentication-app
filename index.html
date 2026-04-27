@@ -35,7 +35,7 @@
       const btn = document.getElementById("loginBtn");
       btn.disabled = true; btn.innerText = "Authenticating...";
       await loginUser(document.getElementById("email").value, document.getElementById("password").value);
-      btn.disabled = false; btn.innerText = "Authorize Access";
+      btn.disabled = false; btn.innerText = "Login to Dashboard";
     });
 
     document.getElementById("forgotPass").addEventListener("click", () => {
