@@ -2,27 +2,75 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>TrustChain | Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrustChain | Admin Control</title>
   <link rel="stylesheet" href="admin-style.css">
 </head>
 <body>
-  <div class="admin-container">
-    <header>
-      <h1>Admin Dashboard</h1>
-      <button id="adminLogout" class="btn-logout">Logout</button>
-    </header>
-    <div class="stat-card">Total Users: <span id="userCount">0</span></div>
-    <div class="user-list">
-      <table>
-        <thead><tr><th>Username</th><th>Email</th><th>Status</th></tr></thead>
-        <tbody id="userTableBody"></tbody>
-      </table>
-    </div>
+  <div id="preloader"><span class="loader"></span></div>
+
+  <div class="admin-layout" id="adminContent" style="display:none;">
+    <aside class="sidebar">
+      <div class="logo">TRUSTCHAIN</div>
+      <nav>
+        <a href="#" class="active">User Management</a>
+        <a href="#">System Logs</a>
+        <a href="#">Security Rules</a>
+        <a href="#">Vault Settings</a>
+      </nav>
+      <button id="adminLogout" class="btn-exit">Exit Terminal</button>
+    </aside>
+
+    <main class="main-body">
+      <header class="top-bar">
+        <h1>System Control Panel</h1>
+        <div class="admin-badge">Admin Access</div>
+      </header>
+
+      <section class="stats-row">
+        <div class="stat-box">
+          <span>Total Registered</span>
+          <h2 id="userCount">0</h2>
+        </div>
+        <div class="stat-box">
+          <span>System Status</span>
+          <h2 class="status-online">Operational</h2>
+        </div>
+      </section>
+
+      <section class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Email Address</th>
+              <th>Status</th>
+              <th>Quick Actions</th>
+            </tr>
+          </thead>
+          <tbody id="userTableBody">
+            </tbody>
+        </table>
+      </section>
+    </main>
   </div>
+
   <script type="module">
-    import { db } from "./firebase.js";
-    import { logoutUser } from "./auth.js";
-    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { auth, db } from "./firebase.js";
+    import { logoutUser, resetUserPassword } from "./auth.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { collection, getDocs, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // Admin Verification
+    onAuthStateChanged(auth, (user) => {
+      if (user && user.email === "emmanuelglobal101@gmail.com") {
+        document.getElementById('preloader').style.display = "none";
+        document.getElementById('adminContent').style.display = "flex";
+        fetchUsers();
+      } else {
+        window.location.href = "index.html";
+      }
+    });
 
     const fetchUsers = async () => {
       try {
@@ -30,13 +78,48 @@
         const body = document.getElementById("userTableBody");
         document.getElementById("userCount").innerText = snap.size;
         body.innerHTML = "";
-        snap.forEach(doc => {
-          const u = doc.data();
-          body.innerHTML += `<tr><td>${u.username}</td><td>${u.email}</td><td>Verified</td></tr>`;
+
+        snap.forEach(userDoc => {
+          const u = userDoc.data();
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${u.username}</td>
+            <td>${u.email}</td>
+            <td><span class="badge ${u.status === 'Disabled' ? 'b-red' : 'b-green'}">${u.status || 'Active'}</span></td>
+            <td class="actions">
+              <button class="btn-reset" onclick="adminReset('${u.email}')">Reset</button>
+              <button class="btn-disable" onclick="toggleUserStatus('${userDoc.id}', '${u.status}')">${u.status === 'Disabled' ? 'Enable' : 'Disable'}</button>
+              <button class="btn-delete" onclick="adminDelete('${userDoc.id}')">Delete</button>
+            </td>
+          `;
+          body.appendChild(row);
         });
-      } catch (e) { console.error("Admin fetch error", e); }
+      } catch (e) { console.error("Fetch Error:", e); }
     };
-    fetchUsers();
+
+    // Globalized functions for the buttons
+    window.adminReset = (email) => {
+      if(confirm(`Send password reset to ${email}?`)) {
+        resetUserPassword(email);
+        alert("Reset link dispatched.");
+      }
+    };
+
+    window.toggleUserStatus = async (uid, currentStatus) => {
+      const newStatus = currentStatus === 'Disabled' ? 'Active' : 'Disabled';
+      if(confirm(`Are you sure you want to set this user to ${newStatus}?`)) {
+        await updateDoc(doc(db, "users", uid), { status: newStatus });
+        fetchUsers();
+      }
+    };
+
+    window.adminDelete = async (uid) => {
+      if(confirm("Permanently delete this user from Firestore? This cannot be undone.")) {
+        await deleteDoc(doc(db, "users", uid));
+        fetchUsers();
+      }
+    };
+
     document.getElementById("adminLogout").addEventListener("click", logoutUser);
   </script>
 </body>

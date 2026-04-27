@@ -7,24 +7,25 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div id="preloader" style="display:none;"><span class="loader"></span></div>
   <div class="card">
     <h2>Welcome Back</h2>
-    <div id="errorMessage" class="error-msg"></div>
-
     <form id="loginForm">
       <div class="input-group">
         <label>EMAIL ADDRESS</label>
         <input type="email" id="email" placeholder="Enter your email" required>
+        <div id="emailError" class="field-error"></div>
       </div>
       <div class="input-group">
         <label>PASSWORD</label>
         <input type="password" id="password" placeholder="••••••••" required>
+        <div id="passwordError" class="field-error"></div>
       </div>
       <button type="submit" id="loginBtn">Login to Dashboard</button>
     </form>
     <div class="switch">
       New to TrustChain? <a href="signup.html">Create Account</a><br>
-      <a id="forgotPass" style="font-size: 11px; margin-top: 10px; display: inline-block;">Forgot Password?</a>
+      <a id="forgotPass" style="font-size: 11px; margin-top: 10px; display: inline-block; cursor: pointer;">Forgot Password?</a>
     </div>
   </div>
 
@@ -32,15 +33,13 @@
     import { loginUser, resetUserPassword } from "./auth.js";
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const btn = document.getElementById("loginBtn");
-      btn.disabled = true; btn.innerText = "Authenticating...";
+      document.getElementById("preloader").style.display = "flex";
       await loginUser(document.getElementById("email").value, document.getElementById("password").value);
-      btn.disabled = false; btn.innerText = "Login to Dashboard";
+      document.getElementById("preloader").style.display = "none";
     });
 
     document.getElementById("forgotPass").addEventListener("click", () => {
-      const email = document.getElementById("email").value;
-      resetUserPassword(email);
+      resetUserPassword(document.getElementById("email").value);
     });
   </script>
 </body>
