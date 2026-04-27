@@ -12,7 +12,7 @@ body { min-height: 100vh; display: flex; justify-content: center; align-items: c
 
 .card { width: 100%; max-width: 400px; background: var(--card); padding: 40px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); text-align: center; }
 
-.input-group { text-align: left; margin-bottom: 18px; }
+.input-group { text-align: left; margin-bottom: 30px; }
 .input-group label { display: block; font-size: 11px; color: var(--text-muted); font-weight: 700; margin-bottom: 8px; letter-spacing: 1px; }
 
 input { width: 100%; padding: 14px; background: var(--input); border: 2px solid transparent; border-radius: 10px; color: #fff; font-size: 15px; }
