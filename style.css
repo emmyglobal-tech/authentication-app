@@ -74,3 +74,28 @@ button:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(139, 92
 
 .switch { margin-top: 20px; font-size: 13px; color: var(--text-muted); line-height: 1.6; }
 .switch a { color: var(--primary); text-decoration: none; font-weight: 600; cursor: pointer; }
+
+
+/* Eye Icon Styling */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper i {
+    position: absolute;
+    right: 15px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.password-wrapper i:hover {
+    color: var(--primary);
+}
+
+/* Ensure the input doesn't hide behind the eye */
+.password-wrapper input {
+    padding-right: 45px;
+}

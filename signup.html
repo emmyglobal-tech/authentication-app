@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TrustChain | Sign Up</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -19,15 +20,24 @@
         <input type="email" id="email" placeholder="example@mail.com" required>
         <div id="emailError" class="field-error"></div>
       </div>
+      
       <div class="input-group">
         <label>PASSWORD</label>
-        <input type="password" id="password" placeholder="Min. 6 characters" required>
+        <div class="password-wrapper">
+          <input type="password" id="password" placeholder="Min. 6 characters" required>
+          <i class="fa-solid fa-eye" id="togglePass1"></i>
+        </div>
       </div>
+
       <div class="input-group">
         <label>CONFIRM PASSWORD</label>
-        <input type="password" id="confirmPassword" placeholder="Re-enter password" required>
+        <div class="password-wrapper">
+          <input type="password" id="confirmPassword" placeholder="Re-enter password" required>
+          <i class="fa-solid fa-eye" id="togglePass2"></i>
+        </div>
         <div id="confirmError" class="field-error"></div>
       </div>
+
       <button type="submit" id="submitBtn">Create Account</button>
     </form>
     <div class="switch">Already a member? <a href="index.html">Login</a></div>
@@ -35,17 +45,39 @@
 
   <script type="module">
     import { startSignup } from "./auth.js";
+
+    // Toggle Logic for Password
+    document.getElementById('togglePass1').addEventListener('click', function() {
+      const input = document.getElementById('password');
+      input.type = input.type === 'password' ? 'text' : 'password';
+      this.classList.toggle('fa-eye-slash');
+    });
+
+    // Toggle Logic for Confirm Password
+    document.getElementById('togglePass2').addEventListener('click', function() {
+      const input = document.getElementById('confirmPassword');
+      input.type = input.type === 'password' ? 'text' : 'password';
+      this.classList.toggle('fa-eye-slash');
+    });
+
     document.getElementById("signupForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const btn = document.getElementById("submitBtn");
       btn.disabled = true; btn.innerText = "Processing...";
+
       await startSignup(
         document.getElementById("email").value,
         document.getElementById("username").value,
         document.getElementById("password").value,
         document.getElementById("confirmPassword").value
       );
+
       btn.disabled = false; btn.innerText = "Create Account";
+
+      // Redirect to login after 3 seconds so they read the success message
+      setTimeout(() => {
+          window.location.href = "index.html";
+      }, 3000);
     });
   </script>
 </body>
